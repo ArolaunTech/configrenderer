@@ -20,7 +20,12 @@ add_subdirectory("glfw-3.4")
 add_library (glad STATIC "glad/src/glad.c")
 target_include_directories(glad PUBLIC "glad/include")
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+    libavcodec
+)
+
 add_executable(configrender ${render_sources} ${PROJECT_PATH})
-target_link_libraries(configrender glfw glad)
+target_link_libraries(configrender glfw glad PkgConfig::LIBAV)
 
 target_include_directories(configrender PUBLIC "glad/include" "/usr/local/Cellar/ffmpeg/8.0_1/include")
