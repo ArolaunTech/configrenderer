@@ -13,6 +13,8 @@ set(
 	"src/render/render.h"
 	"src/scene/scene.cpp"
 	"src/scene/scene.h"
+	"src/video/videowriter.cpp"
+	"src/video/videowriter.h"
 )
 
 add_subdirectory("glfw-3.4")
