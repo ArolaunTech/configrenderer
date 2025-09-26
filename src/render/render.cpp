@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "render.h"
+#include "../scene/scene.h"
 
 WindowManager::WindowManager(Renderer* renderer) {
 	windowRenderer = renderer;
@@ -33,12 +34,12 @@ bool WindowManager::shouldClose() {
 	return glfwWindowShouldClose(window);
 }
 
-void WindowManager::render() {
+void WindowManager::render(Scene scene) {
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
-	windowRenderer->render();
+	windowRenderer->render(scene);
 }
 
 void WindowManager::push() {
@@ -46,9 +47,9 @@ void WindowManager::push() {
 	glfwPollEvents();
 }
 
-Renderer::Renderer(RenderConsts renderconsts) : background(renderconsts.background) {}
+Renderer::Renderer() {}
 
-void Renderer::render() {
-	glClearColor(background.x, background.y, background.z, background.w);
+void Renderer::render(Scene scene) {
+	glClearColor(scene.background.x, scene.background.y, scene.background.z, scene.background.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 }

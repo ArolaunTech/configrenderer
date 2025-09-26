@@ -17,16 +17,16 @@ int main() {
 	VideoConsts videoconsts = setvideoconsts();
 	VideoWriter videowriter(videoconsts);
 
-	RenderConsts renderconsts = setrenderconsts();
+	double frametime = 1 / (double)videoconsts.framerate;
 
-	Scene mainscene;
-	setup(mainscene);
-
-	Renderer renderer(renderconsts);
+	Renderer renderer;
 	WindowManager windowmanager(&renderer);
 
+	double time = 0;
 	while (!windowmanager.shouldClose()) {
-		windowmanager.render();
+		windowmanager.render(setup(time));
 		windowmanager.push();
+
+		time += frametime;
 	}
 }

@@ -1,21 +1,15 @@
 #include <GLFW/glfw3.h>
 
-#include "../types/vector.h"
+#include "../scene/scene.h"
 
 #ifndef RENDER_H
 #define RENDER_H
 
-struct RenderConsts {
-	Vector4 background;
-};
-
 class Renderer {
-	Vector4 background;
-
 public:
-	Renderer(RenderConsts renderconsts);
+	Renderer();
 
-	void render();
+	void render(Scene scene);
 };
 
 class WindowManager {
@@ -27,7 +21,7 @@ public:
 	~WindowManager();
 
 	bool shouldClose();
-	void render();
+	void render(Scene scene);
 	void push();
 };
 
