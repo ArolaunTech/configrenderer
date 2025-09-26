@@ -15,6 +15,7 @@ set(
 	"src/scene/scene.h"
 	"src/video/videowriter.cpp"
 	"src/video/videowriter.h"
+	"src/types/vector.h"
 )
 
 add_subdirectory("glfw-3.4")
