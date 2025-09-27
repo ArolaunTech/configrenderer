@@ -1,5 +1,7 @@
 #include <iostream>
 #include <stdexcept>
+#include <string>
+#include <array>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -19,14 +21,22 @@ int main() {
 
 	double frametime = 1 / (double)videoconsts.framerate;
 
-	Renderer renderer;
+	Renderer renderer(videoconsts);
 	WindowManager windowmanager(&renderer);
 
+	renderer.loadShaders("", "");
+	renderer.initFramebuffer();
+
 	double time = 0;
+	int frames = 0;
+
 	while (!windowmanager.shouldClose()) {
 		windowmanager.render(setup(time));
 		windowmanager.push();
 
 		time += frametime;
+		frames++;
+
+		if (frames == videoconsts.frames) break;
 	}
 }
