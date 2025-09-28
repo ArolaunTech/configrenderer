@@ -24,7 +24,7 @@ int main() {
 	Renderer renderer(videoconsts);
 	WindowManager windowmanager(&renderer);
 
-	renderer.loadShaders("", "");
+	renderer.loadShaders("src/shaders/main.vert", "src/shaders/main.frag");
 	renderer.initFramebuffer();
 
 	double time = 0;
