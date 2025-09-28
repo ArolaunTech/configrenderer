@@ -26,7 +26,17 @@ target_include_directories(glad PUBLIC "glad/include")
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
     libavcodec
+    libavformat
+    libswscale
 )
+
+include(CheckCXXCompilerFlag)
+
+check_cxx_compiler_flag(-Wall temp)
+
+if(temp)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+endif()
 
 add_executable(configrender ${render_sources} ${PROJECT_PATH})
 target_link_libraries(configrender glfw glad PkgConfig::LIBAV)

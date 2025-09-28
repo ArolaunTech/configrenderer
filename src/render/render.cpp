@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <string>
+#include <fstream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -35,7 +36,14 @@ bool WindowManager::shouldClose() {
 	return glfwWindowShouldClose(window);
 }
 
-void WindowManager::render(Scene scene) {
+void WindowManager::render(Scene scene, bool framebuffer) {
+	if (framebuffer) {
+		windowRenderer->bindFramebuffer();
+		glViewport(0, 0, windowRenderer->width, windowRenderer->height);
+	} else {
+		windowRenderer->unbindFramebuffer();
+		glViewport(0, 0, windowRenderer->previewwidth, windowRenderer->previewheight);	
+	}
 	windowRenderer->render(scene);
 }
 
@@ -47,6 +55,8 @@ void WindowManager::push() {
 Renderer::Renderer(VideoConsts consts) {
 	previewwidth = consts.previewwidth;
 	previewheight = consts.previewheight;
+	width = consts.width;
+	height = consts.height;
 }
 
 void Renderer::initFramebuffer() {
@@ -57,7 +67,7 @@ void Renderer::initFramebuffer() {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, previewwidth, previewheight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -68,7 +78,7 @@ void Renderer::initFramebuffer() {
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
 
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, previewwidth, previewheight);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
@@ -79,16 +89,33 @@ void Renderer::initFramebuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::bindFramebuffer() {
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+}
+
+void Renderer::unbindFramebuffer() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 Renderer::~Renderer() {
 	glDeleteFramebuffers(1, &fbo);
 }
 
 void Renderer::render(Scene scene) {
-	glViewport(0, 0, previewwidth, previewheight);
 	glClearColor(scene.background.x, scene.background.y, scene.background.z, scene.background.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
+	std::ifstream vertexFile(vertexPath);
+	std::ifstream fragmentFile(fragmentPath);
 
+	std::string vertexString, fragmentString, str;
+	while (std::getline(vertexFile, str)) {
+		vertexString += str + "\n";
+	}
+	
+	while (std::getline(fragmentFile, str)) {
+		fragmentString += str + "\n";
+	}
 }

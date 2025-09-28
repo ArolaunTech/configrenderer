@@ -7,3 +7,4 @@ configrender
 glad/
 glfw-3.4/
 libglad.a
+*.mp4

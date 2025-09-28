@@ -1,3 +1,5 @@
+#include <string>
+
 #include "src/project.h"
 #include "src/scene/scene.h"
 #include "src/video/videowriter.h"
@@ -7,7 +9,7 @@ Scene setup(double time) {
 	Scene out;
 
 	Vector4 bg;
-	bg.x = time / 10; bg.y = 0.1; bg.z = 0.1; bg.w = 1;
+	bg.x = 1 - time / 10; bg.y = 0.1; bg.z = 0.1; bg.w = 1;
 
 	out.background = bg;
 
@@ -20,9 +22,10 @@ VideoConsts setvideoconsts() {
 	out.width = 1920;
 	out.height = 1080;
 	out.framerate = 30;
-	out.frames = 300;
+	out.frames = out.framerate * 10;
 	out.previewwidth = 640;
 	out.previewheight = 480;
+	out.filepath = "test.mp4";
 
 	return out;
 }

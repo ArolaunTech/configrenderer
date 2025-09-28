@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <array>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -29,9 +29,18 @@ int main() {
 
 	double time = 0;
 	int frames = 0;
+	std::vector<GLubyte> pictureData(videoconsts.width * videoconsts.height * 4, 0);
 
 	while (!windowmanager.shouldClose()) {
-		windowmanager.render(setup(time));
+		Scene renderScene = setup(time);
+
+		windowmanager.render(renderScene, true);
+
+		videowriter.getDataFromFramebuffer(pictureData.data());
+		videowriter.setFramePts(frames);
+		videowriter.writeStoredFrame();
+
+		windowmanager.render(renderScene, false);
 		windowmanager.push();
 
 		time += frametime;

@@ -13,11 +13,16 @@ class Renderer {
 public:
 	int previewwidth;
 	int previewheight;
+	int width;
+	int height;
 
 	Renderer(VideoConsts consts);
 	~Renderer();
 
 	void initFramebuffer();
+	void bindFramebuffer();
+	void unbindFramebuffer();
+
 	void render(Scene scene);
 	void loadShaders(std::string vertexPath, std::string fragmentPath);
 };
@@ -31,7 +36,7 @@ public:
 	~WindowManager();
 
 	bool shouldClose();
-	void render(Scene scene);
+	void render(Scene scene, bool framebuffer);
 	void push();
 };
 
