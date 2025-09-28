@@ -2,5 +2,5 @@
 #include "video/videowriter.h"
 #include "render/render.h"
 
-Scene setup(double time);
+void setup(Scene& scene, double time);
 VideoConsts setvideoconsts();

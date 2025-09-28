@@ -16,6 +16,10 @@ set(
 	"src/video/videowriter.cpp"
 	"src/video/videowriter.h"
 	"src/types/vector.h"
+	"src/types/vector.cpp"
+	"src/geometry/mesh.h"
+	"src/geometry/defaultmeshes.cpp"
+	"src/geometry/defaultmeshes.h"
 )
 
 add_subdirectory("glfw-3.4")

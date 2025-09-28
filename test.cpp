@@ -5,15 +5,8 @@
 #include "src/video/videowriter.h"
 #include "src/types/vector.h"
 
-Scene setup(double time) {
-	Scene out;
-
-	Vector4 bg;
-	bg.x = 1 - time / 10; bg.y = 0.1; bg.z = 0.1; bg.w = 1;
-
-	out.background = bg;
-
-	return out;
+void setup(Scene& scene, double time) {
+	scene.background = Vector4 {time, 0.1, 0.1, 1};
 }
 
 VideoConsts setvideoconsts() {
@@ -26,6 +19,8 @@ VideoConsts setvideoconsts() {
 	out.previewwidth = 640;
 	out.previewheight = 480;
 	out.filepath = "test.mp4";
+
+	out.maxvertices = 1024;
 
 	return out;
 }

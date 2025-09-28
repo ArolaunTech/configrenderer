@@ -21,6 +21,8 @@ struct VideoConsts {
 	int previewheight;
 
 	std::string filepath;
+
+	int maxvertices;
 };
 
 class VideoWriter {

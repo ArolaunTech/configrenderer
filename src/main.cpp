@@ -30,9 +30,10 @@ int main() {
 	double time = 0;
 	int frames = 0;
 	std::vector<GLubyte> pictureData(videoconsts.width * videoconsts.height * 4, 0);
+	Scene renderScene;
 
 	while (!windowmanager.shouldClose()) {
-		Scene renderScene = setup(time);
+		setup(renderScene, time);
 
 		windowmanager.render(renderScene, true);
 
