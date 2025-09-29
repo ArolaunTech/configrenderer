@@ -42,8 +42,9 @@ void WindowManager::render(Scene scene, bool framebuffer) {
 		glViewport(0, 0, windowRenderer->width, windowRenderer->height);
 	} else {
 		windowRenderer->unbindFramebuffer();
-		glViewport(0, 0, windowRenderer->previewwidth, windowRenderer->previewheight);	
+		glViewport(0, 0, windowRenderer->previewwidth, windowRenderer->previewheight);
 	}
+	windowRenderer->setYFlip(framebuffer);
 	windowRenderer->render(scene);
 }
 
@@ -57,6 +58,7 @@ Renderer::Renderer(VideoConsts consts) {
 	previewheight = consts.previewheight;
 	width = consts.width;
 	height = consts.height;
+	maxtris = consts.maxtris;
 }
 
 void Renderer::initFramebuffer() {
@@ -89,6 +91,28 @@ void Renderer::initFramebuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::initBuffers() {
+	glGenBuffers(1, &vboPosition);
+	glGenBuffers(1, &vboNormal);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBufferData(GL_ARRAY_BUFFER, 9 * maxtris * sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboNormal);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBufferData(GL_ARRAY_BUFFER, 9 * maxtris * sizeof(GLfloat), nullptr, GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
 void Renderer::bindFramebuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
@@ -97,13 +121,29 @@ void Renderer::unbindFramebuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::setYFlip(bool yflip) {
+	glUniform1f(flipYLoc, yflip ? -1 : 1);
+}
+
 Renderer::~Renderer() {
 	glDeleteFramebuffers(1, &fbo);
+	glDeleteBuffers(1, &vboPosition);
+	glDeleteBuffers(1, &vboNormal);
+	glDeleteVertexArrays(1, &vao);
 }
 
 void Renderer::render(Scene scene) {
+	glBindBuffer(GL_ARRAY_BUFFER, vboPosition);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, scene.points.size() * sizeof(GLfloat), scene.points.data());
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboNormal);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, scene.points.size() * sizeof(GLfloat), scene.normals.data());
+
 	glClearColor(scene.background.x, scene.background.y, scene.background.z, scene.background.w);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, scene.points.size() / 3);
 }
 
 void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
@@ -160,4 +200,9 @@ void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
 	glUseProgram(shader);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	flipYLoc = glGetUniformLocation(shader, "flipY");
+	if (flipYLoc == -1) {
+		throw std::runtime_error("Could not find flipY.");
+	}
 }

@@ -26,6 +26,7 @@ int main() {
 
 	renderer.loadShaders("src/shaders/main.vert", "src/shaders/main.frag");
 	renderer.initFramebuffer();
+	renderer.initBuffers();
 
 	double time = 0;
 	int frames = 0;
@@ -34,6 +35,7 @@ int main() {
 
 	while (!windowmanager.shouldClose()) {
 		setup(renderScene, time);
+		renderScene.compile();
 
 		windowmanager.render(renderScene, true);
 

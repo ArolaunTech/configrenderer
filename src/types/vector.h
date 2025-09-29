@@ -26,6 +26,14 @@ Vector3 operator-(const Vector3& lhs, const Vector3& rhs);
 Vector4 operator+(const Vector4& lhs, const Vector4& rhs);
 Vector4 operator-(const Vector4& lhs, const Vector4& rhs);
 
+double length(Vector2 a);
+double length(Vector3 a);
+double length(Vector4 a);
+
+Vector2 normalize(Vector2 a);
+Vector3 normalize(Vector3 a);
+Vector4 normalize(Vector4 a);
+
 Vector3 cross(Vector3 a, Vector3 b);
 
 #endif

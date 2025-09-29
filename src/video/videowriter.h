@@ -22,7 +22,7 @@ struct VideoConsts {
 
 	std::string filepath;
 
-	int maxvertices;
+	int maxtris;
 };
 
 class VideoWriter {

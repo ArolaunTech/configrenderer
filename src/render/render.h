@@ -10,6 +10,14 @@
 
 class Renderer {
 	unsigned int fbo;
+
+	unsigned int vao;
+	unsigned int vboPosition;
+	unsigned int vboNormal;
+
+	unsigned int flipYLoc;
+
+	unsigned int maxtris;
 public:
 	int previewwidth;
 	int previewheight;
@@ -20,8 +28,12 @@ public:
 	~Renderer();
 
 	void initFramebuffer();
+	void initBuffers();
+
 	void bindFramebuffer();
 	void unbindFramebuffer();
+
+	void setYFlip(bool yflip);
 
 	void render(Scene scene);
 	void loadShaders(std::string vertexPath, std::string fragmentPath);
