@@ -15,7 +15,12 @@ class Renderer {
 	unsigned int vboPosition;
 	unsigned int vboNormal;
 
+	unsigned int aspectLoc;
 	unsigned int flipYLoc;
+	unsigned int rotateLoc;
+	unsigned int translateLoc;
+	unsigned int viewLoc;
+	unsigned int perspectiveLoc;
 
 	unsigned int maxtris;
 public:
@@ -33,6 +38,7 @@ public:
 	void bindFramebuffer();
 	void unbindFramebuffer();
 
+	void setAspect(double aspectratio);
 	void setYFlip(bool yflip);
 
 	void render(Scene scene);

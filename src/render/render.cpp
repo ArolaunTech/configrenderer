@@ -1,12 +1,15 @@
 #include <stdexcept>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <array>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "render.h"
 #include "../scene/scene.h"
+#include "../types/matrix.h"
 
 WindowManager::WindowManager(Renderer* renderer) {
 	windowRenderer = renderer;
@@ -40,9 +43,13 @@ void WindowManager::render(Scene scene, bool framebuffer) {
 	if (framebuffer) {
 		windowRenderer->bindFramebuffer();
 		glViewport(0, 0, windowRenderer->width, windowRenderer->height);
+
+		windowRenderer->setAspect((double)(windowRenderer->width) / (windowRenderer->height));
 	} else {
 		windowRenderer->unbindFramebuffer();
 		glViewport(0, 0, windowRenderer->previewwidth, windowRenderer->previewheight);
+
+		windowRenderer->setAspect((double)(windowRenderer->previewwidth) / (windowRenderer->previewheight));
 	}
 	windowRenderer->setYFlip(framebuffer);
 	windowRenderer->render(scene);
@@ -125,6 +132,10 @@ void Renderer::setYFlip(bool yflip) {
 	glUniform1f(flipYLoc, yflip ? -1 : 1);
 }
 
+void Renderer::setAspect(double aspectratio) {
+	glUniform1f(aspectLoc, (GLfloat) aspectratio);
+}
+
 Renderer::~Renderer() {
 	glDeleteFramebuffers(1, &fbo);
 	glDeleteBuffers(1, &vboPosition);
@@ -140,10 +151,59 @@ void Renderer::render(Scene scene) {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, scene.points.size() * sizeof(GLfloat), scene.normals.data());
 
 	glClearColor(scene.background.x, scene.background.y, scene.background.z, scene.background.w);
-	glClear(GL_COLOR_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, scene.points.size() / 3);
+
+	std::array<GLfloat, 16> matrixdata;
+
+	for (int j = 0; j < 4; j++) {
+		for (int k = 0; k < 4; k++) {
+			matrixdata[4 * j + k] = (GLfloat)scene.view.elements[j][k];
+		}
+	}
+
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, matrixdata.data());
+
+	for (int j = 0; j < 4; j++) {
+		for (int k = 0; k < 4; k++) {
+			matrixdata[4 * j + k] = (GLfloat)scene.perspective.elements[j][k];
+		}
+	}
+
+	glUniformMatrix4fv(perspectiveLoc, 1, GL_FALSE, matrixdata.data());
+
+	for (int j = 0; j < 4; j++) {
+		for (int k = 0; k < 4; k++) {
+			matrixdata[4 * j + k] = (GLfloat)scene.view.elements[j][k];
+		}
+	}
+
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, matrixdata.data());
+
+	std::size_t nummeshes = scene.meshes.size();
+	for (std::size_t i = 0; i < nummeshes; i++) {
+		for (int j = 0; j < 4; j++) {
+			for (int k = 0; k < 4; k++) {
+				matrixdata[4 * j + k] = (GLfloat)scene.rotations[i].elements[j][k];
+			}
+		}
+
+		glUniformMatrix4fv(rotateLoc, 1, GL_FALSE, matrixdata.data());
+
+		for (int j = 0; j < 4; j++) {
+			for (int k = 0; k < 4; k++) {
+				matrixdata[4 * j + k] = (GLfloat)scene.translations[i].elements[j][k];
+			}
+		}
+
+		glUniformMatrix4fv(translateLoc, 1, GL_FALSE, matrixdata.data());
+		glDrawArrays(GL_TRIANGLES, scene.startindices[i] / 3, scene.sizes[i] / 3);
+	}
 }
 
 void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
@@ -204,5 +264,30 @@ void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
 	flipYLoc = glGetUniformLocation(shader, "flipY");
 	if (flipYLoc == -1) {
 		throw std::runtime_error("Could not find flipY.");
+	}
+
+	aspectLoc = glGetUniformLocation(shader, "scaleX");
+	if (aspectLoc == -1) {
+		throw std::runtime_error("Could not find aspect ratio.");
+	}
+
+	rotateLoc = glGetUniformLocation(shader, "rotate");
+	if (rotateLoc == -1) {
+		throw std::runtime_error("Could not find rotation matrix in shader.");
+	}
+
+	translateLoc = glGetUniformLocation(shader, "translate");
+	if (translateLoc == -1) {
+		throw std::runtime_error("Could not find translation matrix in shader.");
+	}
+
+	viewLoc = glGetUniformLocation(shader, "view");
+	if (viewLoc == -1) {
+		throw std::runtime_error("Could not find view matrix in shader.");
+	}
+
+	perspectiveLoc = glGetUniformLocation(shader, "perspective");
+	if (perspectiveLoc == -1) {
+		throw std::runtime_error("Could not find perspective matrix in shader.");
 	}
 }

@@ -18,10 +18,15 @@ struct Scene {
 
 	std::vector<MeshArrays> meshes;
 
-	std::vector<Matrix> transforms;
+	std::vector<Matrix> rotations;
+	std::vector<Matrix> translations;
+	Matrix view;
+	Matrix perspective;
 
 	std::vector<GLfloat> points;
 	std::vector<GLfloat> normals;
+	std::vector<unsigned int> startindices;
+	std::vector<unsigned int> sizes;
 
 	void compile();
 };

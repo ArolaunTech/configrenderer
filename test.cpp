@@ -8,10 +8,15 @@
 #include "src/geometry/defaultmeshes.h"
 
 void setup(Scene& scene, double time) {
-	scene.background = Vector4 {time, 0.1, 0.1, 1};
+	scene.background = Vector4 {0.1, 0.1, 0.1, 1};
 
-	scene.meshes.clear();
-	scene.meshes.push_back(oneSidedTriangle(Vector3 {0, 0, 1}, Vector3 {0.5, 0, 1}, Vector3 {0, 1, 1}));
+	scene.meshes = {cube(), cube()};
+
+	scene.rotations = {rotateY(time) * rotateX(2 * time), rotateZ(-time) * rotateX(-time)};
+	scene.translations = {translate(Vector3{-1, 0, -2}), translate(Vector3{1, 0, -2})};
+
+	scene.view = identityMatrix(4);
+	scene.perspective = perspective(90, 0.1, 10);
 }
 
 VideoConsts setvideoconsts() {

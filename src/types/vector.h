@@ -21,10 +21,21 @@ struct Vector4 {
 
 Vector2 operator+(const Vector2& lhs, const Vector2& rhs);
 Vector2 operator-(const Vector2& lhs, const Vector2& rhs);
+Vector2 operator-(const Vector2& lhs);
+Vector2 operator*(const Vector2& lhs, const double& rhs);
+Vector2 operator*(const double& lhs, const Vector2& rhs);
+
 Vector3 operator+(const Vector3& lhs, const Vector3& rhs);
 Vector3 operator-(const Vector3& lhs, const Vector3& rhs);
+Vector3 operator-(const Vector3& lhs);
+Vector3 operator*(const Vector3& lhs, const double& rhs);
+Vector3 operator*(const double& lhs, const Vector3& rhs);
+
 Vector4 operator+(const Vector4& lhs, const Vector4& rhs);
 Vector4 operator-(const Vector4& lhs, const Vector4& rhs);
+Vector4 operator-(const Vector4& lhs);
+Vector4 operator*(const Vector4& lhs, const double& rhs);
+Vector4 operator*(const double& lhs, const Vector4& rhs);
 
 double length(Vector2 a);
 double length(Vector3 a);

@@ -10,4 +10,7 @@ struct MeshArrays {
 	std::vector<Vector3> normals;
 };
 
+MeshArrays join(const MeshArrays& a, const MeshArrays& b);
+MeshArrays operator+(const MeshArrays& lhs, const MeshArrays& rhs);
+
 #endif

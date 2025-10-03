@@ -10,6 +10,18 @@ Vector2 operator-(const Vector2& lhs, const Vector2& rhs) {
 	return Vector2 {lhs.x - rhs.x, lhs.y - rhs.y};
 }
 
+Vector2 operator-(const Vector2& lhs) {
+	return Vector2 {-lhs.x, -lhs.y};
+}
+
+Vector2 operator*(const Vector2& lhs, const double& rhs) {
+	return Vector2 {lhs.x * rhs, lhs.y * rhs};
+}
+
+Vector2 operator*(const double& lhs, const Vector2& rhs) {
+	return rhs * lhs;
+}
+
 Vector3 operator+(const Vector3& lhs, const Vector3& rhs) {
 	return Vector3 {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
 }
@@ -18,12 +30,36 @@ Vector3 operator-(const Vector3& lhs, const Vector3& rhs) {
 	return Vector3 {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
 }
 
+Vector3 operator-(const Vector3& lhs) {
+	return Vector3 {-lhs.x, -lhs.y, -lhs.z};
+}
+
+Vector3 operator*(const Vector3& lhs, const double& rhs) {
+	return Vector3 {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs};
+}
+
+Vector3 operator*(const double& lhs, const Vector3& rhs) {
+	return rhs * lhs;
+}
+
 Vector4 operator+(const Vector4& lhs, const Vector4& rhs) {
 	return Vector4 {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
 }
 
 Vector4 operator-(const Vector4& lhs, const Vector4& rhs) {
 	return Vector4 {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w};
+}
+
+Vector4 operator-(const Vector4& lhs) {
+	return Vector4 {-lhs.x, -lhs.y, -lhs.z, -lhs.w};
+}
+
+Vector4 operator*(const Vector4& lhs, const double& rhs) {
+	return Vector4 {lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs};
+}
+
+Vector4 operator*(const double& lhs, const Vector4& rhs) {
+	return rhs * lhs;
 }
 
 double length(Vector2 a) {

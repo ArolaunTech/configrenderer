@@ -19,6 +19,7 @@ set(
 	"src/types/vector.h"
 	"src/types/matrix.cpp"
 	"src/types/matrix.h"
+	"src/geometry/mesh.cpp"
 	"src/geometry/mesh.h"
 	"src/geometry/defaultmeshes.cpp"
 	"src/geometry/defaultmeshes.h"
