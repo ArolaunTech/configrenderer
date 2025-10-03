@@ -161,6 +161,9 @@ void Renderer::render(Scene scene) {
 
 	std::array<GLfloat, 16> matrixdata;
 
+	glUniform3f(lightdirLoc, 1.0, 1.0, 1.0);
+	glUniform3f(lightcolorLoc, 1, 1, 1);
+
 	for (int j = 0; j < 4; j++) {
 		for (int k = 0; k < 4; k++) {
 			matrixdata[4 * j + k] = (GLfloat)scene.view.elements[j][k];
@@ -289,5 +292,15 @@ void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
 	perspectiveLoc = glGetUniformLocation(shader, "perspective");
 	if (perspectiveLoc == -1) {
 		throw std::runtime_error("Could not find perspective matrix in shader.");
+	}
+
+	lightdirLoc = glGetUniformLocation(shader, "lightdir");
+	if (lightdirLoc == -1) {
+		throw std::runtime_error("Could not find lightdir matrix in shader.");
+	}
+
+	lightcolorLoc = glGetUniformLocation(shader, "lightcolor");
+	if (lightcolorLoc == -1) {
+		throw std::runtime_error("Could not find lightcolor matrix in shader.");
 	}
 }

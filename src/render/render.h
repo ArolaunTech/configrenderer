@@ -21,6 +21,8 @@ class Renderer {
 	unsigned int translateLoc;
 	unsigned int viewLoc;
 	unsigned int perspectiveLoc;
+	unsigned int lightdirLoc;
+	unsigned int lightcolorLoc;
 
 	unsigned int maxtris;
 public:
