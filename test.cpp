@@ -10,7 +10,7 @@
 void setup(Scene& scene, double time) {
 	scene.background = Vector4 {0.1, 0.1, 0.1, 1};
 
-	scene.meshes = {cube(), cube()};
+	scene.meshes = {cube(), sphere(0.866, 10)};
 
 	scene.rotations = {rotateY(time) * rotateX(2 * time), rotateZ(-time) * rotateX(-time)};
 	scene.translations = {translate(Vector3{-1, 0, -2}), translate(Vector3{1, 0, -2})};

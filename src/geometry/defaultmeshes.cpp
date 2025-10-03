@@ -117,3 +117,76 @@ MeshArrays cube() {
 
 	return out;
 }
+
+MeshArrays sphere(double radius, int subdivisions) {
+	MeshArrays out;
+
+	std::vector<std::array<Vector3, 3> > points = {
+		{
+			Vector3 {1, 0, 0},
+			Vector3 {0, 1, 0},
+			Vector3 {0, 0, 1},
+		}, {
+			Vector3 {0, 1, 0},
+			Vector3 {-1, 0, 0},
+			Vector3 {0, 0, 1},
+		}, {
+			Vector3 {-1, 0, 0},
+			Vector3 {0, -1, 0},
+			Vector3 {0, 0, 1},
+		}, {
+			Vector3 {0, -1, 0},
+			Vector3 {1, 0, 0},
+			Vector3 {0, 0, 1},
+		}, {
+			Vector3 {1, 0, 0},
+			Vector3 {0, -1, 0},
+			Vector3 {0, 0, -1},
+		}, {
+			Vector3 {0, -1, 0},
+			Vector3 {-1, 0, 0},
+			Vector3 {0, 0, -1},
+		}, {
+			Vector3 {-1, 0, 0},
+			Vector3 {0, 1, 0},
+			Vector3 {0, 0, -1},
+		}, {
+			Vector3 {0, 1, 0},
+			Vector3 {1, 0, 0},
+			Vector3 {0, 0, -1}
+		}
+	};
+
+	std::size_t numtriangles = points.size();
+	for (std::size_t i = 0; i < numtriangles; i++) {
+		for (int x = 0; x < subdivisions; x++) {
+			for (int y = 0; x + y < subdivisions; y++) {
+				double xFloat = (double)x / subdivisions;
+				double yFloat = (double)y / subdivisions;
+				double zFloat = 1 - xFloat - yFloat;
+
+				Vector3 a = points[i][0];
+				Vector3 b = points[i][1];
+				Vector3 c = points[i][2];
+
+				out.points.push_back(xFloat * a + yFloat * b + zFloat * c);
+				out.points.push_back((xFloat + 1.0 / subdivisions) * a + yFloat * b + (zFloat - 1.0 / subdivisions) * c);
+				out.points.push_back(xFloat * a + (yFloat + 1.0 / subdivisions) * b + (zFloat - 1.0 / subdivisions) * c);
+				
+				if (x == 0) continue;
+
+				out.points.push_back(xFloat * a + yFloat * b + zFloat * c);
+				out.points.push_back(xFloat * a + (yFloat + 1.0 / subdivisions) * b + (zFloat - 1.0 / subdivisions) * c);
+				out.points.push_back((xFloat - 1.0 / subdivisions) * a + (yFloat + 1.0 / subdivisions) * b + zFloat * c);
+			}
+		}
+	}
+
+	std::size_t numpoints = out.points.size();
+	for (std::size_t i = 0; i < numpoints; i++) {
+		out.points[i] = radius * normalize(out.points[i]);
+		out.normals.push_back(normalize(out.points[i]));
+	}
+
+	return out;
+}
