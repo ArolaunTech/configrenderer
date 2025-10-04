@@ -3,8 +3,7 @@
 #include <stdexcept>
 
 #include "matrix.h"
-
-const double pi = 3.14159265358979323;
+#include "../consts/consts.h"
 
 Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
 	std::size_t lhsrows = lhs.elements.size();

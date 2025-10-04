@@ -1,6 +1,9 @@
+#include <cmath>
+
 #include "defaultmeshes.h"
 #include "mesh.h"
 #include "../types/vector.h"
+#include "../consts/consts.h"
 
 MeshArrays oneSidedTriangle(Vector3 a, Vector3 b, Vector3 c) {
 	MeshArrays out;
@@ -186,6 +189,55 @@ MeshArrays sphere(double radius, int subdivisions) {
 	for (std::size_t i = 0; i < numpoints; i++) {
 		out.points[i] = radius * normalize(out.points[i]);
 		out.normals.push_back(normalize(out.points[i]));
+	}
+
+	return out;
+}
+
+MeshArrays cylinder(int n) {
+	MeshArrays out;
+
+	for (int i = 1; i < n - 1; i++) {
+		out.points.push_back(Vector3 {0.5, 0, 0.5});
+		out.normals.push_back(Vector3 {0, 0, 1});
+
+		for (int j = 0; j < 2; j++) {
+			double angle = 2 * pi * (i + j) / n;
+
+			out.points.push_back(Vector3 {.5 * std::cos(angle), .5 * std::sin(angle), 0.5});
+			out.normals.push_back(Vector3 {0, 0, 1});
+		}
+
+		out.points.push_back(Vector3 {0.5, 0, -0.5});
+		out.normals.push_back(Vector3 {0, 0, -1});
+
+		for (int j = 0; j < 2; j++) {
+			double angle = 2 * pi * (i + j) / n;
+
+			out.points.push_back(Vector3 {.5 * std::cos(angle), -.5 * std::sin(angle), -0.5});
+			out.normals.push_back(Vector3 {0, 0, -1});
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		double lowerangle = 2 * pi * i / n;
+		double upperangle = 2 * pi * (i + 1) / n;
+
+		out.points.push_back(Vector3 {.5 * std::cos(lowerangle), .5 * std::sin(lowerangle), 0.5});
+		out.points.push_back(Vector3 {.5 * std::cos(lowerangle), .5 * std::sin(lowerangle), -0.5});
+		out.points.push_back(Vector3 {.5 * std::cos(upperangle), .5 * std::sin(upperangle), -0.5});
+
+		out.points.push_back(Vector3 {.5 * std::cos(lowerangle), .5 * std::sin(lowerangle), 0.5});
+		out.points.push_back(Vector3 {.5 * std::cos(upperangle), .5 * std::sin(upperangle), -0.5});
+		out.points.push_back(Vector3 {.5 * std::cos(upperangle), .5 * std::sin(upperangle), 0.5});
+
+		out.normals.push_back(Vector3 {std::cos(lowerangle), std::sin(lowerangle), 0});
+		out.normals.push_back(Vector3 {std::cos(lowerangle), std::sin(lowerangle), 0});
+		out.normals.push_back(Vector3 {std::cos(upperangle), std::sin(upperangle), 0});
+
+		out.normals.push_back(Vector3 {std::cos(lowerangle), std::sin(lowerangle), 0});
+		out.normals.push_back(Vector3 {std::cos(upperangle), std::sin(upperangle), 0});
+		out.normals.push_back(Vector3 {std::cos(upperangle), std::sin(upperangle), 0});
 	}
 
 	return out;

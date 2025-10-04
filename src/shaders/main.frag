@@ -10,7 +10,7 @@ vec3 gamma(vec3 light) {
 }
 
 void main() {
-	vec3 diffuselight = max(vec3(0.), dot(fragNormal, normalize(fraglightdir)) * fraglightcolor) + 0.1;
+	vec3 diffuselight = max(vec3(0.), dot(fragNormal, normalize(fraglightdir)) * fraglightcolor) + 0.03;
 
 	fragColor = vec4(gamma(diffuselight), 1.0);
 }
