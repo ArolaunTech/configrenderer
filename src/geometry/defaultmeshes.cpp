@@ -242,3 +242,38 @@ MeshArrays cylinder(int n) {
 
 	return out;
 }
+
+MeshArrays cone(int n) {
+	MeshArrays out;
+
+	for (int i = 1; i < n - 1; i++) {
+		out.points.push_back(Vector3 {0.5, 0, 0.5});
+		out.normals.push_back(Vector3 {0, 0, 1});
+
+		for (int j = 0; j < 2; j++) {
+			double angle = 2 * pi * (i + j) / n;
+
+			out.points.push_back(Vector3 {.5 * std::cos(angle), .5 * std::sin(angle), 0.5});
+			out.normals.push_back(Vector3 {0, 0, 1});
+		}
+	}
+
+	double horizontalmult = 2 / std::sqrt(5);
+	double verticalmult = 1 / std::sqrt(5);
+
+	for (int i = 0; i < n; i++) {
+		double lowerangle = 2 * pi * i / n;
+		double midangle = 2 * pi * (i + .5) / n;
+		double upperangle = 2 * pi * (i + 1) / n;
+
+		out.points.push_back(Vector3 {.5 * std::cos(upperangle), .5 * std::sin(upperangle), 0.5});
+		out.points.push_back(Vector3 {.5 * std::cos(lowerangle), .5 * std::sin(lowerangle), 0.5});
+		out.points.push_back(Vector3 {0, 0, -0.5});
+
+		out.normals.push_back(Vector3 {horizontalmult * std::cos(upperangle), horizontalmult * std::sin(upperangle), -verticalmult});
+		out.normals.push_back(Vector3 {horizontalmult * std::cos(lowerangle), horizontalmult * std::sin(lowerangle), -verticalmult});
+		out.normals.push_back(Vector3 {horizontalmult * std::cos(midangle), horizontalmult * std::sin(midangle), -verticalmult});
+	}
+
+	return out;
+}
