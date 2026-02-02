@@ -27,7 +27,7 @@ void main() {
 	gl_Position.x /= scaleX;
 	gl_Position.y *= flipY;
 
-	fragNormal = adjugate(transform) * normal;
+	fragNormal = normalize(adjugate(transform) * normal);
 	fraglightdir = lightdir;
 	fraglightcolor = lightcolor;
 }
