@@ -12,8 +12,10 @@ void setup(Scene& scene, double time) {
 
 	scene.meshes = {cube(), cone(50)};
 
-	scene.rotations = {rotateY(time) * rotateX(2 * time), rotateY(.5 * time) * rotateX(-time)};
-	scene.translations = {translate(Vector3{-1, 0, -2}), translate(Vector3{1, 0, -2})};
+	scene.transforms = {
+		rotateY(time) * rotateX(2 * time) * translate(Vector3{-1, 0, -2}), 
+		rotateY(.5 * time) * rotateX(-time) * translate(Vector3{1, 0, -2})
+	};
 
 	scene.view = identityMatrix(4);
 	scene.perspective = perspective(90, 0.1, 10);

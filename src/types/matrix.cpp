@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <stdexcept>
+#include <algorithm>
 
 #include "matrix.h"
 #include "../consts/consts.h"

@@ -18,8 +18,7 @@ struct Scene {
 
 	std::vector<MeshArrays> meshes;
 
-	std::vector<Matrix> rotations;
-	std::vector<Matrix> translations;
+	std::vector<Matrix> transforms;
 	Matrix view;
 	Matrix perspective;
 

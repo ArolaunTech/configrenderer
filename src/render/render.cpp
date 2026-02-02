@@ -192,19 +192,11 @@ void Renderer::render(Scene scene) {
 	for (std::size_t i = 0; i < nummeshes; i++) {
 		for (int j = 0; j < 4; j++) {
 			for (int k = 0; k < 4; k++) {
-				matrixdata[4 * j + k] = (GLfloat)scene.rotations[i].elements[j][k];
+				matrixdata[4 * j + k] = (GLfloat)scene.transforms[i].elements[j][k];
 			}
 		}
 
-		glUniformMatrix4fv(rotateLoc, 1, GL_FALSE, matrixdata.data());
-
-		for (int j = 0; j < 4; j++) {
-			for (int k = 0; k < 4; k++) {
-				matrixdata[4 * j + k] = (GLfloat)scene.translations[i].elements[j][k];
-			}
-		}
-
-		glUniformMatrix4fv(translateLoc, 1, GL_FALSE, matrixdata.data());
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, matrixdata.data());
 		glDrawArrays(GL_TRIANGLES, scene.startindices[i] / 3, scene.sizes[i] / 3);
 	}
 }
@@ -274,14 +266,9 @@ void Renderer::loadShaders(std::string vertexPath, std::string fragmentPath) {
 		throw std::runtime_error("Could not find aspect ratio.");
 	}
 
-	rotateLoc = glGetUniformLocation(shader, "rotate");
-	if (rotateLoc == -1) {
-		throw std::runtime_error("Could not find rotation matrix in shader.");
-	}
-
-	translateLoc = glGetUniformLocation(shader, "translate");
-	if (translateLoc == -1) {
-		throw std::runtime_error("Could not find translation matrix in shader.");
+	transformLoc = glGetUniformLocation(shader, "transform");
+	if (transformLoc == -1) {
+		throw std::runtime_error("Could not find transformation matrix in shader.");
 	}
 
 	viewLoc = glGetUniformLocation(shader, "view");

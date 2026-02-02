@@ -17,8 +17,7 @@ class Renderer {
 
 	unsigned int aspectLoc;
 	unsigned int flipYLoc;
-	unsigned int rotateLoc;
-	unsigned int translateLoc;
+	unsigned int transformLoc;
 	unsigned int viewLoc;
 	unsigned int perspectiveLoc;
 	unsigned int lightdirLoc;
