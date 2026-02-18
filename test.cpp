@@ -14,7 +14,7 @@ void setup(Scene& scene, double time) {
 
 	scene.transforms = {
 		rotateY(time) * rotateX(2 * time) * translate(Vector3{-1, 0, -2}), 
-		rotateY(.5 * time) * rotateX(-time) * translate(Vector3{1, 0, -2})
+		scaleZ(2) * rotateY(.5 * time) * rotateX(-time) * translate(Vector3{1, 0, -2})
 	};
 
 	scene.view = identityMatrix(4);

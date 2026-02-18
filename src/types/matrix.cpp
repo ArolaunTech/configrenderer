@@ -102,6 +102,45 @@ Matrix rotateZ(double amount) {
 	return out;
 }
 
+Matrix scaleX(double amount) {
+	Matrix out;
+
+	out.elements = {
+		{amount, 0, 0, 0},
+		{0,      1, 0, 0},
+		{0,      0, 1, 0},
+		{0,      0, 0, 1}
+	};
+
+	return out;
+}
+
+Matrix scaleY(double amount) {
+	Matrix out;
+
+	out.elements = {
+		{1, 0,      0, 0},
+		{0, amount, 0, 0},
+		{0, 0,      1, 0},
+		{0, 0,      0, 1}
+	};
+
+	return out;
+}
+
+Matrix scaleZ(double amount) {
+	Matrix out;
+
+	out.elements = {
+		{1, 0, 0,      0},
+		{0, 1, 0,      0},
+		{0, 0, amount, 0},
+		{0, 0, 0,      1}
+	};
+
+	return out;
+}
+
 Matrix perspective(double fov, double znear, double zfar) {
 	Matrix out;
 

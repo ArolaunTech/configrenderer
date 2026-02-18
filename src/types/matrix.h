@@ -16,6 +16,9 @@ Matrix translate(Vector3 x);
 Matrix rotateX(double amount);
 Matrix rotateY(double amount);
 Matrix rotateZ(double amount);
+Matrix scaleX(double amount);
+Matrix scaleY(double amount);
+Matrix scaleZ(double amount);
 
 Matrix perspective(double fov, double znear, double zfar);
 
